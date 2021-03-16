@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Score</string>
+    <string name="textview2">B队</string>
+    <string name="textview1">A队</string>
+    <string name="scoreA">0</string>
+    <string name="scoreB">0</string>
+    <string name="button1">+1</string>
+    <string name="button2">+2</string>
+    <string name="button3">+3</string>
+    <string name="todo">TODO</string>
+    <string name="shpname">score_data</string>
+    <string name="Adata">ADATA</string>
+    <string name="Bdata">BDATA</string>
+</resources>
