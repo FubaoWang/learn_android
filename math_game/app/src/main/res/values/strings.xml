@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">math_game</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_message">口算测试</string>
+    <string name="title_image">title_image</string>
+    <string name="title_button">开始测试</string>
+    <string name="high_score">最高分数：%d</string>
+    <string name="current_score">当前得分：%d</string>
+    <string name="input">答案：%d</string>
+    <string name="you_input">请输入答案：</string>
+    <string name="win_score">新纪录：%d</string>
+    <string name="win_button">继续</string>
+    <string name="lose_button">返回</string>
+    <string name="lose_score">答对数：%d</string>
+    <string name="answer_correct">答对了继续</string>
+    <string name="dialog_tile">Are you sure?</string>
+    <string name="dialog_ok">OK</string>
+    <string name="dialog_cancle">Cancle</string>
+</resources>
