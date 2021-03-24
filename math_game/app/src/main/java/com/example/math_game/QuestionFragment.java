@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.math_game.databinding.FragmentQuestionBinding;
-import com.example.math_game.databinding.FragmentTitleBinding;
 
 /**
  * A simple {@link Fragment} subclass.

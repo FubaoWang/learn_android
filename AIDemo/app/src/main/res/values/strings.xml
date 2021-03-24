@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">AIDemo</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="titleimage">titleimage</string>
+    <string name="titletext">AI Demo</string>
+    <string name="button1">图像分类</string>
+    <string name="button2">目标检测</string>
+    <string name="button3">人脸识别</string>
+    <string name="button4">风格迁移</string>
+</resources>
