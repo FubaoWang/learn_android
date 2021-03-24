@@ -1,6 +1,7 @@
 package com.example.aidemo;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.AssetManager;
 import android.util.Log;
 import android.util.Size;

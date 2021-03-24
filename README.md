@@ -7,7 +7,9 @@
 
 ## 3、AIDemo
      功能：
-     图像分类（todo）
+     图像分类：
+     （初步完成，将代码全部写在ClassififcationFragment中）2021-03-24
+      权限设置在AndroidManifest.xml文件中
      目标检测（todo）
      人脸识别（todo）
      风格迁移（todo）

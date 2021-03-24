@@ -8,19 +8,23 @@
     <fragment
         android:id="@+id/titleFragment"
         android:name="com.example.aidemo.TitleFragment"
-        android:label="fragment_title"
-        tools:layout="@layout/fragment_title" >
+        android:label="主页"
+        tools:layout="@layout/fragment_title">
         <action
             android:id="@+id/action_titleFragment_to_classificationFragment"
-            app:destination="@id/classificationFragment" />
+            app:destination="@id/classificationFragment"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/fragment_fade_exit" />
     </fragment>
     <fragment
         android:id="@+id/classificationFragment"
         android:name="com.example.aidemo.ClassificationFragment"
-        android:label="fragment_classification"
-        tools:layout="@layout/fragment_classification" >
+        android:label="图像分类"
+        tools:layout="@layout/fragment_classification">
         <action
             android:id="@+id/action_classificationFragment_to_titleFragment"
-            app:destination="@id/titleFragment" />
+            app:destination="@id/titleFragment"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/fragment_fade_exit" />
     </fragment>
 </navigation>

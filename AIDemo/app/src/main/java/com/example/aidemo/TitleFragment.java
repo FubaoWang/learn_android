@@ -71,7 +71,6 @@ public class TitleFragment extends Fragment {
         FragmentTitleBinding binding;
         binding  = DataBindingUtil.inflate(inflater,R.layout.fragment_title,container,false);
         binding.setLifecycleOwner(requireActivity());
-
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {

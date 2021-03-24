@@ -8,4 +8,7 @@
     <string name="button2">目标检测</string>
     <string name="button3">人脸识别</string>
     <string name="button4">风格迁移</string>
+    <string name="dialog_tile">Are you sure?</string>
+    <string name="dialog_ok">OK</string>
+    <string name="dialog_cancle">Cancle</string>
 </resources>

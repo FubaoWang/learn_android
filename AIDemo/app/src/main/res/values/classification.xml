@@ -2,5 +2,5 @@
 <resources>
     <string name="imageview">image</string>
     <string name="button">选择图片</string>
-    <string name="textview">识别结果：%s</string>
+    <string name="textview">识别结果：</string>
 </resources>

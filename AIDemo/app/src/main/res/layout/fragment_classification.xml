@@ -75,7 +75,7 @@
             android:layout_width="277dp"
             android:layout_height="125dp"
             android:text="@string/textview"
-            android:textSize="30sp"
+            android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/guideline14"
             app:layout_constraintHorizontal_bias="0.454"
