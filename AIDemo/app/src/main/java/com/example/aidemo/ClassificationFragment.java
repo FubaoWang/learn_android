@@ -80,6 +80,7 @@ public class ClassificationFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         init();
+        Log.i("CLS", "onCreate: init success");
     }
 
     @Override

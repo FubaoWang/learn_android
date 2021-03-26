@@ -15,6 +15,10 @@
             app:destination="@id/classificationFragment"
             app:enterAnim="@anim/fragment_fade_enter"
             app:exitAnim="@anim/fragment_fade_exit" />
+        <action
+            android:id="@+id/action_titleFragment_to_objectDetectionFragment"
+            app:destination="@id/objectDetectionFragment"
+            app:enterAnim="@anim/fragment_open_enter" />
     </fragment>
     <fragment
         android:id="@+id/classificationFragment"
@@ -26,5 +30,16 @@
             app:destination="@id/titleFragment"
             app:enterAnim="@anim/fragment_fade_enter"
             app:exitAnim="@anim/fragment_fade_exit" />
+    </fragment>
+    <fragment
+        android:id="@+id/objectDetectionFragment"
+        android:name="com.example.aidemo.ObjectDetectionFragment"
+        android:label="目标检测"
+        tools:layout= "@layout/fragment_object_detection" >
+        <action
+            android:id="@+id/action_objectDetectionFragment_to_titleFragment"
+            app:destination="@id/titleFragment"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:popUpTo="@id/titleFragment" />
     </fragment>
 </navigation>

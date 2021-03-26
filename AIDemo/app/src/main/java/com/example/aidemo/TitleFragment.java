@@ -71,6 +71,7 @@ public class TitleFragment extends Fragment {
         FragmentTitleBinding binding;
         binding  = DataBindingUtil.inflate(inflater,R.layout.fragment_title,container,false);
         binding.setLifecycleOwner(requireActivity());
+
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -80,6 +81,8 @@ public class TitleFragment extends Fragment {
                         controller.navigate(R.id.action_titleFragment_to_classificationFragment);
                         break;
                     case R.id.button2:
+                        NavController controller2 = Navigation.findNavController(view);
+                        controller2.navigate(R.id.action_titleFragment_to_objectDetectionFragment);
                         break;
                     case R.id.button3:
                         break;
@@ -90,6 +93,7 @@ public class TitleFragment extends Fragment {
         };
 
         binding.button1.setOnClickListener(listener);
+        binding.button2.setOnClickListener(listener);
 
         return binding.getRoot();
     }

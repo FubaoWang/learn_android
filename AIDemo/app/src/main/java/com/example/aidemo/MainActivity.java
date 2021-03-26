@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
         }
         else {
-            controller.navigate(R.id.titleFragment);
+            finish();
         }
         return super.onSupportNavigateUp();
     }

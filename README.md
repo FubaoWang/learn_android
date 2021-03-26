@@ -10,6 +10,7 @@
      图像分类：
      （初步完成，将代码全部写在ClassififcationFragment中）2021-03-24
       权限设置在AndroidManifest.xml文件中
-     目标检测（todo）
+     目标检测 ：
+     （使用nanodet完成目标检测，后端为MNN，其中jni文件路径不能有大写字母）2020-03-26
      人脸识别（todo）
      风格迁移（todo）
