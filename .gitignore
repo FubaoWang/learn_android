@@ -88,3 +88,4 @@ lint/tmp/
 # other
 .idea
 .DS_Store
+AIDemo/app/build
