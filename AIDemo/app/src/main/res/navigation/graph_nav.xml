@@ -19,6 +19,10 @@
             android:id="@+id/action_titleFragment_to_objectDetectionFragment"
             app:destination="@id/objectDetectionFragment"
             app:enterAnim="@anim/fragment_open_enter" />
+        <action
+            android:id="@+id/action_titleFragment_to_superResolutionFragment"
+            app:destination="@id/superResolutionFragment"
+            app:enterAnim="@anim/fragment_fade_enter" />
     </fragment>
     <fragment
         android:id="@+id/classificationFragment"
@@ -40,6 +44,17 @@
             android:id="@+id/action_objectDetectionFragment_to_titleFragment"
             app:destination="@id/titleFragment"
             app:enterAnim="@anim/fragment_open_enter"
+            app:popUpTo="@id/titleFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/superResolutionFragment"
+        android:name="com.example.aidemo.SuperResolutionFragment"
+        android:label="超分辨率"
+        tools:layout="@layout/fragment_super_resolution">>
+        <action
+            android:id="@+id/action_superResolutionFragment_to_titleFragment"
+            app:destination="@id/titleFragment"
+            app:exitAnim="@anim/fragment_fade_exit"
             app:popUpTo="@id/titleFragment" />
     </fragment>
 </navigation>

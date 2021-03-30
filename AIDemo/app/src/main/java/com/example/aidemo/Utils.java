@@ -3,8 +3,15 @@ package com.example.aidemo;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.util.Log;
 import android.util.Size;
+
+import com.example.aidemo.TFLite.SplitBitmap;
 
 import java.io.BufferedReader;
 import java.io.File;

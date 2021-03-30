@@ -85,6 +85,8 @@ public class TitleFragment extends Fragment {
                         controller2.navigate(R.id.action_titleFragment_to_objectDetectionFragment);
                         break;
                     case R.id.button3:
+                        NavController controller3 = Navigation.findNavController(view);
+                        controller3.navigate(R.id.action_titleFragment_to_superResolutionFragment);
                         break;
                     case R.id.button4:
                         break;
@@ -94,6 +96,7 @@ public class TitleFragment extends Fragment {
 
         binding.button1.setOnClickListener(listener);
         binding.button2.setOnClickListener(listener);
+        binding.button3.setOnClickListener(listener);
 
         return binding.getRoot();
     }
