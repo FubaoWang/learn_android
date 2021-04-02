@@ -89,6 +89,8 @@ public class TitleFragment extends Fragment {
                         controller3.navigate(R.id.action_titleFragment_to_superResolutionFragment);
                         break;
                     case R.id.button4:
+                        NavController controller4 = Navigation.findNavController(view);
+                        controller4.navigate(R.id.action_titleFragment_to_styleTransferFragment);
                         break;
                 }
             }
@@ -97,7 +99,7 @@ public class TitleFragment extends Fragment {
         binding.button1.setOnClickListener(listener);
         binding.button2.setOnClickListener(listener);
         binding.button3.setOnClickListener(listener);
-
+        binding.button4.setOnClickListener(listener);
         return binding.getRoot();
     }
 }
