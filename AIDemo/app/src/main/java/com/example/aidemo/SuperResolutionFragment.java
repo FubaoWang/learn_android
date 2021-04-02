@@ -111,7 +111,7 @@ public class SuperResolutionFragment extends Fragment {
             return;
         }
         try {
-            FileInputStream fis = new FileInputStream(getPathFromURI(getContext(), data.getData()));
+            FileInputStream fis = new FileInputStream(Utils.getPathFromURI(getContext(), data.getData()));
             Bitmap bitmap = BitmapFactory.decodeStream(fis);
             srinference(bitmap);
         }catch (Exception e){
@@ -153,21 +153,6 @@ public class SuperResolutionFragment extends Fragment {
         }
     }
 
-    // 根据相册的Uri获取图片的路径
-    String getPathFromURI(Context context, Uri uri) {
-        String result;
-        Cursor cursor = context.getContentResolver().query(uri, null, null, null, null);
-        if (cursor == null) {
-            result = uri.getPath();
-        } else {
-            cursor.moveToFirst();
-            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
-            result = cursor.getString(idx);
-            cursor.close();
-        }
-        return result;
-    }
-
     void initlistenr(){
         binding.button1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -196,7 +181,7 @@ public class SuperResolutionFragment extends Fragment {
         binding.button3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean flag = saveBitmap(srbitmap);
+                boolean flag = Utils.saveBitmap(getContext(),srbitmap);
                 if(flag){
                     Toast.makeText(getActivity(), "图片保存成功！", Toast.LENGTH_SHORT).show();
                 }else {
@@ -231,32 +216,6 @@ public class SuperResolutionFragment extends Fragment {
                 });
             }
         });
-    }
-
-    private boolean saveBitmap(Bitmap bitmap) {
-        boolean ret = false;
-        if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            return ret;
-        }
-        final File rootDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsoluteFile();
-        if (!rootDir.exists()){
-            if (!rootDir.mkdirs()) {
-                Log.e(TAG, "saveBitmap: Make dir failed");
-            }
-        }
-        String filename = SystemClock.uptimeMillis() + ".png";
-        File file = new File(rootDir, filename);
-        try {
-            final FileOutputStream out = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
-            out.flush();
-            out.close();
-            ret = true;
-        } catch (final Exception e) {
-            Log.e(TAG, "saveBitmap: Exception!");
-        }
-        getActivity().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)));
-        return ret;
     }
 
 }

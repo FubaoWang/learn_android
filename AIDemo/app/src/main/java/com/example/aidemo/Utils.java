@@ -3,11 +3,16 @@ package com.example.aidemo;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.net.Uri;
+import android.os.Environment;
+import android.os.SystemClock;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.util.Size;
 
@@ -163,5 +168,46 @@ public class Utils {
             e.printStackTrace();
         }
         return list;
+    }
+
+    // 根据相册的Uri获取图片的路径
+    public static String getPathFromURI(Context context, Uri uri) {
+        String result;
+        Cursor cursor = context.getContentResolver().query(uri, null, null, null, null);
+        if (cursor == null) {
+            result = uri.getPath();
+        } else {
+            cursor.moveToFirst();
+            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+            result = cursor.getString(idx);
+            cursor.close();
+        }
+        return result;
+    }
+
+    public static boolean saveBitmap(Context context, Bitmap bitmap) {
+        boolean ret = false;
+        if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+            return ret;
+        }
+        final File rootDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsoluteFile();
+        if (!rootDir.exists()){
+            if (!rootDir.mkdirs()) {
+                Log.e(TAG, "saveBitmap: Make dir failed");
+            }
+        }
+        String filename = SystemClock.uptimeMillis() + ".png";
+        File file = new File(rootDir, filename);
+        try {
+            final FileOutputStream out = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+            out.flush();
+            out.close();
+            ret = true;
+        } catch (final Exception e) {
+            Log.e(TAG, "saveBitmap: Exception!");
+        }
+        context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)));
+        return ret;
     }
 }
