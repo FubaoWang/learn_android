@@ -1,7 +1,13 @@
 package com.example.aidemo;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
@@ -10,6 +16,7 @@ import android.os.HandlerThread;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.aidemo.databinding.FragmentStyleTransferBinding;
 
@@ -61,6 +68,7 @@ public class StyleTransferFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        init();
     }
 
     @Override
@@ -73,8 +81,65 @@ public class StyleTransferFragment extends Fragment {
         initlistenr();
         return binding.getRoot();
     }
-    void init(){}
-    void initlistenr(){
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if(data == null){
+            return;
+        }
+        Uri image_uri = data.getData();
+        if (resultCode == Activity.RESULT_OK) {
+            ShowImage(requestCode,image_uri);
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    void init(){}
+
+    void initlistenr(){
+         binding.button1.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+                  OpenImage(1);
+             }
+         });
+         binding.button2.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+                  OpenImage(2);
+             }
+         });
+         binding.button3.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+
+             }
+         });
+         binding.button4.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+                 Bitmap stbitmap = ((BitmapDrawable) binding.imageView3.getDrawable()).getBitmap();
+                 boolean flag = Utils.saveBitmap(getContext(),stbitmap);
+                 if(flag){
+                     Toast.makeText(getActivity(), "图片保存成功！", Toast.LENGTH_SHORT).show();
+                 }else {
+                     Toast.makeText(getActivity(), "图片保存失败！！！", Toast.LENGTH_SHORT).show();
+                 }
+             }
+         });
+    }
+    // 判断不同按钮打开相册
+    public void OpenImage(int a){
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        startActivityForResult(intent, a);
+    }
+    // 展示图片按照不同按钮
+    public void ShowImage(int a, Uri uri){
+        if(a==1){
+            binding.imageView1.setImageURI(uri);
+        }else{
+            binding.imageView2.setImageURI(uri);
+        }
     }
 }
