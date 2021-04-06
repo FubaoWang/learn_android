@@ -210,4 +210,187 @@ public class Utils {
         context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)));
         return ret;
     }
+
+    /***
+     * 将原图切分成众多小块图片，根据原图的宽高和cropBitmapSize来决定分成多少小块
+     * @param bitmap 待拆分的位图
+     * @return 返回切割后的小块位图列表
+     */
+    public static ArrayList<SplitBitmap> splitBitmap(Bitmap bitmap) {
+        int cropBitmapSize = 80;
+        // 获取原图的宽高
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+        // 原图宽高除以cropBitmapSize，得到应该将图片的宽和高分成几部分
+        float splitFW = (float)width / cropBitmapSize;
+        float splitFH = (float)height / cropBitmapSize;
+        int splitW = (int)(splitFW);
+        int splitH = (int)(splitFH);
+        // 用来存放切割以后的小块图片的信息
+        ArrayList<SplitBitmap> splitedBitmaps = new ArrayList<SplitBitmap>();
+
+        //对图片进行切割
+        if (splitFW < 1.2 && splitFH < 1.2) {
+            // 直接计算整张图
+            SplitBitmap sb = new SplitBitmap();
+            sb.row = 0;
+            sb.column = 0;
+            sb.bitmap = bitmap;
+            splitedBitmaps.add(sb);
+        } else if (splitFW < 1.2 && splitFH > 1) {
+            // 仅在高度上拆分
+            for (int i = 0; i < splitH; i++) {
+                SplitBitmap sb = new SplitBitmap();
+                sb.row = i;
+                sb.column = 0;
+                if (i == splitH - 1) {
+                    sb.bitmap = Bitmap.createBitmap(bitmap, 0, i * cropBitmapSize, cropBitmapSize, height - i * cropBitmapSize, null, false);
+                }else {
+                    sb.bitmap = Bitmap.createBitmap(bitmap, 0, i * cropBitmapSize, cropBitmapSize, cropBitmapSize, null, false);
+                }
+                splitedBitmaps.add(sb);
+            }
+        } else if (splitFW > 1 && splitFH < 1.2) {
+            // 仅在宽度上拆分
+            for (int i = 0; i < splitW; i++) {
+                SplitBitmap sb = new SplitBitmap();
+                sb.row = 0;
+                sb.column = i;
+                if (i == splitW - 1) {
+                    sb.bitmap = Bitmap.createBitmap(bitmap, i * cropBitmapSize, 0, cropBitmapSize, width - i * cropBitmapSize, null, false);
+                }else {
+                    sb.bitmap = Bitmap.createBitmap(bitmap, i * cropBitmapSize, 0, cropBitmapSize, cropBitmapSize, null, false);
+                }
+
+                splitedBitmaps.add(sb);
+            }
+        } else {
+            // 在高度和宽度上都拆分
+            for (int i = 0; i < splitH; i++) {
+                for (int j = 0; j < splitW; j++) {
+                    int lastH = cropBitmapSize;
+                    int lastW = cropBitmapSize;
+                    // 最后一行的高度
+                    if (i == splitH - 1) {
+                        lastH = height - i * cropBitmapSize;
+//                        Log.e(TAG, "lastH:" +lastH);
+                    }
+                    // 最后一列的宽度
+                    if (j == splitW - 1) {
+                        lastW = width - j * cropBitmapSize;
+//                        Log.e(TAG, "lastW:" +lastW);
+                    }
+//                    Log.e(TAG, "lastH:" + lastH + " lastW:" + lastW +
+//                            " bitmapH:" + bitmap.getHeight() + " bitmapW:" + bitmap.getWidth() +
+//                            " i * cropBitmapSize:" + i * cropBitmapSize + " j * cropBitmapSize:" + j * cropBitmapSize +
+//                            " i:" + i + " j:" + j
+//                    );
+
+                    SplitBitmap sb = new SplitBitmap();
+                    // 记录当前小块图片所处的行列
+                    sb.row = i;
+                    sb.column = j;
+                    // 获取当前小块的位图
+                    sb.bitmap = Bitmap.createBitmap(bitmap, j * cropBitmapSize, i * cropBitmapSize, lastW, lastH, null, false);
+                    splitedBitmaps.add(sb);
+                }
+            }
+        }
+        return splitedBitmaps;
+    }
+
+
+//    private  final Paint boxPaint = new Paint();
+    /***
+     * 初始化画笔，用来调试切分图片和合并图片的
+     */
+//    private  void initPaint() {
+//        boxPaint.setColor(Color.RED);
+//        boxPaint.setStyle(Paint.Style.STROKE);
+//        boxPaint.setStrokeWidth(2.0f);
+//        boxPaint.setStrokeCap(Paint.Cap.ROUND);
+//        boxPaint.setStrokeJoin(Paint.Join.ROUND);
+//        boxPaint.setStrokeMiter(100);
+//    }
+
+    /***
+     * 合并小块位图列表为一个大的位图
+     * @param splitedBitmaps 待合并的小块位图列表
+     * @return 返回合并后的大的位图
+     */
+    public static Bitmap mergeBitmap(ArrayList<SplitBitmap> splitedBitmaps) {
+        int mergeBitmapWidth = 0;
+        int mergeBitmapHeight = 0;
+        // 遍历位图列表，根据行和列的信息，计算出合并后的位图的宽高
+        for (SplitBitmap sb : splitedBitmaps) {
+//            Log.e(TAG, "sb.column:" + sb.column + " sb.row:" + sb.row + " sb.bitmap.getHeight():" + sb.bitmap.getHeight() + " sb.bitmap.getWidth():" + sb.bitmap.getWidth());
+            if (sb.row == 0) {
+                mergeBitmapWidth += sb.bitmap.getWidth();
+            }
+            if (sb.column == 0) {
+                mergeBitmapHeight += sb.bitmap.getHeight();
+            }
+        }
+
+        Log.e(TAG, "splitedBitmaps: " + splitedBitmaps.size() + " mergeBitmapWidth:" + mergeBitmapWidth + " mergeBitmapHeight:" + mergeBitmapHeight);
+        // 根据宽高创建合并后的空位图
+        Bitmap mBitmap = Bitmap.createBitmap(mergeBitmapWidth, mergeBitmapHeight, Bitmap.Config.ARGB_8888);
+
+        // 创建画布，我们将在画布上拼接新的大位图
+        Canvas canvas = new Canvas(mBitmap);
+
+        // 计算位图列表的长度
+        int splitedBitmapsSize = splitedBitmaps.size();
+
+        //lastRowSB记录上一行的第一列的数据，主要用来判断当前行是否最后一行，因为最后一行之前的所有行的高度都是一致的
+        SplitBitmap lastColumn0SB = null;
+
+        for (int i = 0; i < splitedBitmapsSize; i++) {
+            // 获取当前小块信息
+            SplitBitmap sb = splitedBitmaps.get(i);
+            // 根据当前小块所处的行列和宽高计算小块应处于大位图中的位置
+            int left = sb.column * sb.bitmap.getWidth();
+            int top = sb.row * sb.bitmap.getHeight();
+            int right = left + sb.bitmap.getWidth();
+            int bottom = top + sb.bitmap.getHeight();
+
+            // 最后一列
+            // 根据计算下一个小块位图的列数是否为0判断当前小块是否是最后一列
+            if (i != 0 && i < splitedBitmapsSize - 1 && splitedBitmaps.get(i + 1).column == 0) {
+                // 因为最后一列的宽度不确定，所以，要根据上一小块的宽高来计算当前小块在大位图中的起始位置
+                SplitBitmap lastBitmap = splitedBitmaps.get(i - 1);
+                left = sb.column * lastBitmap.bitmap.getWidth();
+                top = sb.row * lastBitmap.bitmap.getHeight();
+                right = left + sb.bitmap.getWidth();
+                bottom = top + sb.bitmap.getHeight();
+            }
+
+            //最后一行
+            // 根据对比上一行中的高度来计算当前行是否最后一行，因为最后一行前的所有行的高度都是一致的
+            if (i != 0 && i < splitedBitmapsSize && lastColumn0SB != null && splitedBitmaps.get(i).bitmap.getHeight() != lastColumn0SB.bitmap.getHeight()) {
+//                Log.e(TAG, "---------------");
+                // 如果最后一行的高度和之前行的高度不一致，那么就要根据上一行中的高度来重新计算当前行的起始位置
+                SplitBitmap lastColumnBitmap = lastColumn0SB;
+                left = sb.column * lastColumnBitmap.bitmap.getWidth();
+                top = sb.row * lastColumnBitmap.bitmap.getHeight();
+                right = left + sb.bitmap.getWidth();
+                bottom = top + sb.bitmap.getHeight();
+            } else if (sb.column == 0) {
+                // 记录上一行的第一个列的小块信息
+                lastColumn0SB = sb;
+            }
+
+            // 这个是当前小块的信息
+            Rect srcRect = new Rect(0, 0, sb.bitmap.getWidth(), sb.bitmap.getHeight());
+            // 这个是当前小块应该在大图中的位置信息
+            Rect destRect = new Rect(left, top, right, bottom);
+            // 将当前小块画到大图中
+            canvas.drawBitmap(sb.bitmap, srcRect, destRect, null);
+            // 这个是为了调试而画的框
+//            canvas.drawRect(destRect, boxPaint);
+//            Log.e(TAG,"I:" + i + " col:" + sb.column + " row:" + sb.row + " width:" + sb.bitmap.getWidth() + " height:" + sb.bitmap.getHeight());
+        }
+
+        return mBitmap;
+    }
 }
