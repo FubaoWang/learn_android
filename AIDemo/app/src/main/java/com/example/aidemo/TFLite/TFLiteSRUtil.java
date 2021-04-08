@@ -20,9 +20,6 @@ public class TFLiteSRUtil {
     private TensorImage inputImageBuffer;
     private  TensorBuffer outputImageBuffer;
     private static final int NUM_THREADS = 4;
-    private static final float[] IMAGE_MEAN = new float[]{127.5f, 127.5f, 127.5f};
-    private static final float[] IMAGE_STD = new float[]{127.5f, 127.5f, 127.5f};
-    private ImageProcessor imageProcessor;
     private int scale = 4;
     private SRProgressCallback callback;
     /**

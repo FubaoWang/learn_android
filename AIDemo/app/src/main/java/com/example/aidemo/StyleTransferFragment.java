@@ -18,7 +18,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.aidemo.TFLite.TFLiteStyleTransferUtil;
 import com.example.aidemo.databinding.FragmentStyleTransferBinding;
+
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.tensorflow.lite.support.tensorbuffer.TensorBuffer;
+
+import java.io.File;
+import java.nio.ByteBuffer;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -57,9 +64,13 @@ public class StyleTransferFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+    private TFLiteStyleTransferUtil tflitextract, tflitemerge;
     private FragmentStyleTransferBinding binding;
     private Handler handler;
     private HandlerThread handlerThread;
+    private @NonNull ByteBuffer latent;
+    private TensorBuffer feature;
+    private String string;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -90,13 +101,54 @@ public class StyleTransferFragment extends Fragment {
         Uri image_uri = data.getData();
         if (resultCode == Activity.RESULT_OK) {
             ShowImage(requestCode,image_uri);
+            // 1返回风格特征，
+            if(requestCode==1){
+                binding.progressBar.setVisibility(View.VISIBLE);
+                string = "提取图片style中。。。";
+                binding.textView.setText(string);
+
+                Bitmap stylebitmap = ((BitmapDrawable) binding.imageView1.getDrawable()).getBitmap();
+                inference(tflitextract, stylebitmap,1);
+            }
+//            else{
+//                Bitmap contentbitmap = ((BitmapDrawable) binding.imageView2.getDrawable()).getBitmap();
+//                inference(tflitextract, contentbitmap,2);
+//            }
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    void init(){}
+    void init(){
+        // 加载style模型
+        String styleModelPath = getActivity().getCacheDir().getAbsolutePath() + File.separator + "extractmodel_f16.tflite";
+        Utils.copyFileFromAsset(getActivity(), "extractmodel_f16.tflite", styleModelPath);
+        try {
+            tflitextract = new TFLiteStyleTransferUtil(styleModelPath);
+            Toast.makeText(getActivity(), "extract模型加载成功！", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Toast.makeText(getActivity(), "extract模型加载失败！", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+            getActivity().finish();
+        }
+        // 加载content模型
+        String contentModelPath = getActivity().getCacheDir().getAbsolutePath() + File.separator + "mergemodel_f16.tflite";
+        Utils.copyFileFromAsset(getActivity(), "mergemodel_f16.tflite", contentModelPath);
+        try {
+            tflitemerge = new TFLiteStyleTransferUtil(contentModelPath);
+            Toast.makeText(getActivity(), "merge模型加载成功！", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Toast.makeText(getActivity(), "merge模型加载失败！", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+            getActivity().finish();
+        }
+        //        线程处理函数
+        handlerThread = new HandlerThread("inference");
+        handlerThread.start();
+        handler = new Handler(handlerThread.getLooper());
+    }
 
     void initlistenr(){
+         binding.progressBar.setVisibility(View.INVISIBLE);
          binding.button1.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View v) {
@@ -112,7 +164,14 @@ public class StyleTransferFragment extends Fragment {
          binding.button3.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View v) {
+                 binding.progressBar.setVisibility(View.VISIBLE);
+                 string = "合成图片中。。。";
+                 binding.textView.setText(string);
+                 Bitmap mBitmap = Bitmap.createBitmap(10, 10, Bitmap.Config.ARGB_8888);
+                 binding.imageView3.setImageBitmap(mBitmap);
 
+                 Bitmap contentbitmap = ((BitmapDrawable) binding.imageView2.getDrawable()).getBitmap();
+                 inference(tflitemerge,contentbitmap,latent);
              }
          });
          binding.button4.setOnClickListener(new View.OnClickListener() {
@@ -142,4 +201,49 @@ public class StyleTransferFragment extends Fragment {
             binding.imageView2.setImageURI(uri);
         }
     }
+
+    private synchronized void runInBackground(final Runnable r) {
+        if (handler != null) {
+            handler.post(r);
+        }
+    }
+    void inference(TFLiteStyleTransferUtil tflite, Bitmap bitmap,int flag) {
+        runInBackground(new Runnable() {
+            @Override
+            public void run() {
+                latent = tflite.inference(bitmap);
+                Toast.makeText(getActivity(), "style提取成功！", Toast.LENGTH_SHORT).show();
+
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        binding.progressBar.setVisibility(View.INVISIBLE);
+                        string = "提取图片style成功！！！";
+                        binding.textView.setText(string);
+                    }
+                });
+            }
+        });
+    }
+
+    void inference(TFLiteStyleTransferUtil tflite, Bitmap content, @NonNull ByteBuffer style) {
+        runInBackground(new Runnable() {
+            @Override
+            public void run() {
+                Bitmap res = tflite.inference(content, style);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(res != null){
+                            binding.progressBar.setVisibility(View.INVISIBLE);
+                            string = "合成图片成功！！！";
+                            binding.textView.setText(string);
+                            binding.imageView3.setImageBitmap(res);
+                        }
+                    }
+                });
+            }
+        });
+    }
+
 }

@@ -43,9 +43,9 @@ public class TFLiteClassificationUtil {
             options.setNumThreads(NUM_THREADS);
             // 使用Android自带的API或者GPU加速
 //            NnApiDelegate delegate = new NnApiDelegate();
-            GpuDelegate delegate = new GpuDelegate();
-            options.addDelegate(delegate);
-//            options.setUseXNNPACK(true);
+//            GpuDelegate delegate = new GpuDelegate();
+//            options.addDelegate(delegate);
+            options.setUseXNNPACK(true);
             tflite = new Interpreter(file, options);
             // 获取输入，shape为{1, height, width, 3}
             int[] imageShape = tflite.getInputTensor(tflite.getInputIndex("input_1")).shape();

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -185,6 +186,17 @@ public class Utils {
         return result;
     }
 
+    public static Bitmap URItoBitmap(Context context, Uri uri){
+        Bitmap bitmap=null;
+        try {
+            FileInputStream fis = new FileInputStream(Utils.getPathFromURI(context, uri));
+            bitmap = BitmapFactory.decodeStream(fis);
+        }catch (Exception e){
+            Log.e(TAG, "URItoBitmap: 失败！");
+        }
+        return bitmap;
+    }
+    // 保存图片到相册
     public static boolean saveBitmap(Context context, Bitmap bitmap) {
         boolean ret = false;
         if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
