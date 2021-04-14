@@ -26,6 +26,9 @@
         <action
             android:id="@+id/action_titleFragment_to_styleTransferFragment"
             app:destination="@id/styleTransferFragment" />
+        <action
+            android:id="@+id/action_titleFragment_to_surfaceActivity"
+            app:destination="@id/surfaceActivity" />
     </fragment>
     <fragment
         android:id="@+id/classificationFragment"
@@ -69,4 +72,9 @@
             android:id="@+id/action_styleTransferFragment_to_titleFragment"
             app:destination="@id/titleFragment" />
     </fragment>
+    <activity
+        android:id="@+id/surfaceActivity"
+        android:name="com.example.aidemo.SurfaceActivity"
+        android:label="NCNN"
+        tools:layout="@layout/activity_surface" />
 </navigation>

@@ -16,10 +16,11 @@ android {
             cmake {
                 arguments "-DANDROID_ARM_NEON=TRUE", "-DANDROID_PLATFORM=android-21", "-DANDROID_STL=c++_shared"
                 cppFlags ""
+                abiFilters "armeabi-v7a" , "arm64-v8a"
             }
         }
         ndk {
-            moduleName "MNNwfb"
+            moduleName "jniLibs"
             ldLibs "log", "z", "m"
             abiFilters "armeabi-v7a", "arm64-v8a"
         }

@@ -92,6 +92,16 @@ public class TitleFragment extends Fragment {
                         NavController controller4 = Navigation.findNavController(view);
                         controller4.navigate(R.id.action_titleFragment_to_styleTransferFragment);
                         break;
+                    case R.id.button5:
+                        SurfaceActivity.USE_MODEL = SurfaceActivity.FACE_LANDMARK;
+                        NavController controller5 = Navigation.findNavController(view);
+                        controller5.navigate(R.id.action_titleFragment_to_surfaceActivity);
+                        break;
+                    case R.id.button6:
+                        SurfaceActivity.USE_MODEL = SurfaceActivity.SIMPLE_POSE;
+                        NavController controller6 = Navigation.findNavController(view);
+                        controller6.navigate(R.id.action_titleFragment_to_surfaceActivity);
+                        break;
                 }
             }
         };
@@ -100,6 +110,8 @@ public class TitleFragment extends Fragment {
         binding.button2.setOnClickListener(listener);
         binding.button3.setOnClickListener(listener);
         binding.button4.setOnClickListener(listener);
+        binding.button5.setOnClickListener(listener);
+        binding.button6.setOnClickListener(listener);
         return binding.getRoot();
     }
 }

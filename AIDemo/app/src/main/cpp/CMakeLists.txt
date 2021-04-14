@@ -9,19 +9,16 @@ endif ()
 
 aux_source_directory(. SRC_LIST)
 
+# MNN的编译
 add_library( # Sets the name of the library.
         tengmnn
-
         # Sets the library as a shared library.
         SHARED
-
         # Provides a relative path to your source file(s).
         ${SRC_LIST})
 
-
 find_library( # Sets the name of the path variable.
         log-lib
-
         # Specifies the name of the NDK library that
         # you want CMake to locate.
         log)
@@ -44,22 +41,16 @@ set_target_properties(
 include_directories(${CMAKE_SOURCE_DIR}/mnn/include/)
 include_directories(${CMAKE_SOURCE_DIR}/mnn/include/expr/)
 add_library(libMNN STATIC IMPORTED)
-add_library(libMNN_CL STATIC IMPORTED)
-add_library(libMNN_GL STATIC IMPORTED)
-add_library(libMNN_Express STATIC IMPORTED)
-add_library(libMNN_Vulkan STATIC IMPORTED)
 set_target_properties(
         libMNN
-        libMNN_CL
-        libMNN_GL
-        libMNN_Express
-        libMNN_Vulkan
         PROPERTIES IMPORTED_LOCATION
         ${CMAKE_SOURCE_DIR}/mnn/${ANDROID_ABI}/libMNN.so
+)
+add_library(libMNN_CL STATIC IMPORTED)
+set_target_properties(
+        libMNN_CL
+        PROPERTIES IMPORTED_LOCATION
         ${CMAKE_SOURCE_DIR}/mnn/${ANDROID_ABI}/libMNN_CL.so
-        ${CMAKE_SOURCE_DIR}/mnn/${ANDROID_ABI}/libMNN_GL.so
-        ${CMAKE_SOURCE_DIR}/mnn/${ANDROID_ABI}/libMNN_Express.so
-        ${CMAKE_SOURCE_DIR}/mnn/${ANDROID_ABI}/libMNN_Vulkan.so
 )
 
 target_link_libraries( # Specifies the target library.
@@ -71,5 +62,7 @@ target_link_libraries( # Specifies the target library.
         ${android-lib}
         ${jnigraphics-lib}
         libopencv_java4
-        libMNN libMNN_CL libMNN_GL libMNN_Express libMNN_Vulkan)
+        libMNN libMNN_CL)
+
+
 
