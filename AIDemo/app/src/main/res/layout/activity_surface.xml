@@ -13,7 +13,7 @@
         tools:context=".SurfaceActivity">
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/btnPhoto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="图片"
@@ -32,17 +32,14 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button"
+            app:layout_constraintTop_toBottomOf="@+id/btnPhoto"
             app:layout_constraintVertical_bias="1.0" />
 
         <TextureView
             android:id="@+id/view_finder"
-            android:layout_width="0dp"
+            android:layout_width="150dp"
             android:layout_height="150dp"
-            android:layout_marginStart="0dp"
-            android:layout_marginTop="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintDimensionRatio="h,4:3"
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
@@ -102,12 +99,12 @@
             android:layout_marginStart="5dp"
             android:text="THR:-.--,NMS:-.--"
             app:layout_constraintBottom_toTopOf="@+id/imageView"
-            app:layout_constraintEnd_toStartOf="@+id/btn_video"
+            app:layout_constraintEnd_toStartOf="@+id/btnCamera"
             app:layout_constraintStart_toEndOf="@+id/button"
             app:layout_constraintTop_toBottomOf="@+id/thresholdSeekBar" />
 
         <Button
-            android:id="@+id/btn_video"
+            android:id="@+id/btnCamera"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="打开相机"

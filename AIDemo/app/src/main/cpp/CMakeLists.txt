@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10.2)
-project("tengmnn")
+project("wfbmodel")
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fopenmp")
@@ -9,22 +9,17 @@ endif ()
 
 aux_source_directory(. SRC_LIST)
 
-# MNN的编译
 add_library( # Sets the name of the library.
-        tengmnn
+        wfbmodel
         # Sets the library as a shared library.
         SHARED
         # Provides a relative path to your source file(s).
         ${SRC_LIST})
 
-find_library( # Sets the name of the path variable.
-        log-lib
-        # Specifies the name of the NDK library that
-        # you want CMake to locate.
-        log)
-
+find_library(log-lib log)
 find_library(android-lib android)
 find_library(jnigraphics-lib jnigraphics)
+find_library(vulkan-lib vulkan)
 
 # opencv
 include_directories(
@@ -37,9 +32,10 @@ set_target_properties(
         ${CMAKE_SOURCE_DIR}/opencv/${ANDROID_ABI}/libopencv_java4.so
 )
 
-# mnn
+# MNN的编译
 include_directories(${CMAKE_SOURCE_DIR}/mnn/include/)
 include_directories(${CMAKE_SOURCE_DIR}/mnn/include/expr/)
+
 add_library(libMNN STATIC IMPORTED)
 set_target_properties(
         libMNN
@@ -53,16 +49,49 @@ set_target_properties(
         ${CMAKE_SOURCE_DIR}/mnn/${ANDROID_ABI}/libMNN_CL.so
 )
 
+# NCNN编译
+include_directories(
+        ncnn/include
+        ncnnvulkan/include
+)
+add_library( ncnn STATIC IMPORTED )
+set_target_properties( # Specifies the target library.
+        ncnn
+
+        # Specifies the parameter you want to define.
+        PROPERTIES IMPORTED_LOCATION
+
+        # Provides the path to the library you want to import.
+        ${CMAKE_SOURCE_DIR}/ncnnvulkan/${ANDROID_ABI}/libncnn.a )
+
+
+# ncnnvulkan
+add_library(glslang STATIC IMPORTED)
+add_library(OGLCompiler STATIC IMPORTED)
+add_library(OSDependent STATIC IMPORTED)
+add_library(SPIRV STATIC IMPORTED)
+set_target_properties(glslang PROPERTIES IMPORTED_LOCATION ${CMAKE_SOURCE_DIR}/ncnnvulkan/${ANDROID_ABI}/libglslang.a)
+set_target_properties(OGLCompiler PROPERTIES IMPORTED_LOCATION ${CMAKE_SOURCE_DIR}/ncnnvulkan/${ANDROID_ABI}/libOGLCompiler.a)
+set_target_properties(OSDependent PROPERTIES IMPORTED_LOCATION ${CMAKE_SOURCE_DIR}/ncnnvulkan/${ANDROID_ABI}/libOSDependent.a)
+set_target_properties(SPIRV PROPERTIES IMPORTED_LOCATION ${CMAKE_SOURCE_DIR}/ncnnvulkan/${ANDROID_ABI}/libSPIRV.a)
+
+
+# 最后链接
 target_link_libraries( # Specifies the target library.
-        tengmnn
+        wfbmodel
 
         # Links the target library to the log library
         # included in the NDK.
         ${log-lib}
+        ${vulkan-lib}
         ${android-lib}
         ${jnigraphics-lib}
         libopencv_java4
-        libMNN libMNN_CL)
+        libMNN libMNN_CL
+        ncnn
+        glslang SPIRV OGLCompiler OSDependent )
+
+
 
 
 

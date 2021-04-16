@@ -5,7 +5,7 @@ import android.graphics.Bitmap;
 public class NanoDet {
 
     static {
-        System.loadLibrary("tengmnn");
+        System.loadLibrary("wfbmodel");
     }
 
     public static native void init(String name, String path, boolean useGPU);
