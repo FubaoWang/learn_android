@@ -29,6 +29,9 @@
         <action
             android:id="@+id/action_titleFragment_to_surfaceActivity"
             app:destination="@id/surfaceActivity" />
+        <action
+            android:id="@+id/action_titleFragment_to_ocrFragment"
+            app:destination="@id/ocrFragment" />
     </fragment>
     <fragment
         android:id="@+id/classificationFragment"
@@ -77,4 +80,13 @@
         android:name="com.example.aidemo.SurfaceActivity"
         android:label="NCNN"
         tools:layout="@layout/activity_surface" />
+    <fragment
+        android:id="@+id/ocrFragment"
+        android:name="com.example.aidemo.OcrFragment"
+        android:label="OCR"
+        tools:layout="@layout/fragment_ocr">
+        <action
+            android:id="@+id/action_ocrFragment_to_titleFragment"
+            app:destination="@id/titleFragment" />
+    </fragment>
 </navigation>

@@ -10,6 +10,7 @@
     <string name="button4">风格迁移</string>
     <string name="button5">人脸关键点</string>
     <string name="button6">人体关节检测</string>
+    <string name="button7"> OCR </string>
     <string name="dialog_tile">Are you sure?</string>
     <string name="dialog_ok">OK</string>
     <string name="dialog_cancle">Cancle</string>

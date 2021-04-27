@@ -102,6 +102,10 @@ public class TitleFragment extends Fragment {
                         NavController controller6 = Navigation.findNavController(view);
                         controller6.navigate(R.id.action_titleFragment_to_surfaceActivity);
                         break;
+                    case R.id.button7:
+                        NavController controller7 = Navigation.findNavController(view);
+                        controller7.navigate(R.id.action_titleFragment_to_ocrFragment);
+                        break;
                 }
             }
         };
@@ -112,6 +116,7 @@ public class TitleFragment extends Fragment {
         binding.button4.setOnClickListener(listener);
         binding.button5.setOnClickListener(listener);
         binding.button6.setOnClickListener(listener);
+        binding.button7.setOnClickListener(listener);
         return binding.getRoot();
     }
 }
