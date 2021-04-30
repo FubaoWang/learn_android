@@ -11,10 +11,7 @@ NanoDet::NanoDet(const std::string &mnn_path, bool useGPU) {
     NanoDet_interpreter = std::shared_ptr<MNN::Interpreter>(MNN::Interpreter::createFromFile(mnn_path.c_str()));
     MNN::ScheduleConfig config;
     config.numThread = 4;
-    config.type = static_cast<MNNForwardType>(MNN_FORWARD_OPENCL);
-//    if (ture) {
-//        config.type = MNN_FORWARD_VULKAN;
-//    }
+    config.type = static_cast<MNNForwardType>(MNN_FORWARD_CPU);
     config.backupType = MNN_FORWARD_CPU;
     MNN::BackendConfig backendConfig;
     backendConfig.memory = MNN::BackendConfig::Memory_Normal;  // 内存

@@ -107,18 +107,9 @@ target_link_libraries( # Specifies the target library.
         ${android-lib}
         ${jnigraphics-lib}
         libopencv_java4
-        libMNN libMNN_CL)
-target_link_libraries( # Specifies the target library.
-        wfbmodel
-
-        # Links the target library to the log library
-        # included in the NDK.
-        ${log-lib}
-        ${vulkan-lib}
-        ${android-lib}
-        ${jnigraphics-lib}
+        libMNN libMNN_CL
         ncnnvk
-        glslang SPIRV OGLCompiler OSDependent )
+        glslang SPIRV OGLCompiler OSDependent)
 
 
 
