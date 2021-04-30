@@ -24,6 +24,7 @@
 ToDo: 利用MNN完成OCR功能
 
 > Android AIDemo界面
+
 | 主页面 | 图像分类 | 目标检测 |
 |-------------------|-------------|---------|
 |<img width="270" height="500" src="./IMAGES/主页面.png"/>|<img width="270" height="500" src="./IMAGES/图像分类.png"/>|<img width="270" height="500" src="./IMAGES/目标检测.png"/>|
