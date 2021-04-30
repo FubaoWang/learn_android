@@ -27,7 +27,7 @@ ToDo: 利用MNN完成OCR功能
 
 | 主页面 | 图像分类 | 目标检测 |
 |-------------------|-------------|---------|
-|<img width="270" height="500" src="./IMAGES/主页面.png"/>|<img width="270" height="500" src="./IMAGES/图像分类.png"/>|<img width="270" height="500" src="./IMAGES/目标检测.png"/>|
+|<img width="270" height="500" src="./IMAGES/主页.png"/>|<img width="270" height="500" src="./IMAGES/图像分类.png"/>|<img width="270" height="500" src="./IMAGES/目标检测.png"/>|
 
 | 超分辨率 | 风格迁移 | 人脸关键点检测 |
 |-------------------|-------------|---------|
