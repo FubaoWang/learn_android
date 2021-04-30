@@ -7,9 +7,15 @@
 #include "FaceLandmark.h"
 #include "SimplePose.h"
 
+#include "OcrResultUtils.h"
+#include "BitmapUtils.h"
+#include "OcrLite.h"
+#include "OcrUtils.h"
+
 #include <android/bitmap.h>
 #include <android/log.h>
 #include <opencv2/imgproc/types_c.h>
+
 
 #ifndef LOG_TAG
 #define LOG_TAG "WFB"
@@ -167,6 +173,69 @@ Java_com_example_aidemo_ncnn_SimplePose_detect(JNIEnv *env, jclass clazz, jobjec
     return ret;
 
 }
+
+/*********************************************************************************************
+                                         ChineseOCR Lite
+ ********************************************************************************************/
+static OcrLite *ocrLite;
+
+JNIEXPORT jint JNI_OnLoad(JavaVM *vm, void *reserved) {
+    ocrLite = new OcrLite();
+    return JNI_VERSION_1_4;
+}
+
+JNIEXPORT void JNI_OnUnload(JavaVM *vm, void *reserved) {
+    LOGI("Goodbye OcrLite!");
+    delete ocrLite;
+}
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_example_aidemo_ocr_OcrEngine_init(JNIEnv *env, jclass clazz, jobject assetManager,
+                                           jint numThread){
+    ocrLite->init(env, assetManager, numThread);
+}
+
+cv::Mat makePadding(cv::Mat &src, const int padding) {
+    if (padding <= 0) return src;
+    cv::Scalar paddingScalar = {255, 255, 255};
+    cv::Mat paddingSrc;
+    cv::copyMakeBorder(src, paddingSrc, padding, padding, padding, padding, cv::BORDER_ISOLATED,
+                       paddingScalar);
+    return paddingSrc;
+}
+
+extern "C"
+JNIEXPORT jobject JNICALL
+Java_com_example_aidemo_ocr_OcrEngine_detect(JNIEnv *env, jclass clazz, jobject input, jobject output,
+                                                 jint padding, jint maxSideLen, jfloat boxScoreThresh, jfloat boxThresh,
+                                                 jfloat unClipRatio, jboolean doAngle, jboolean mostAngle) {
+    Logger("padding(%d),maxSideLen(%d),boxScoreThresh(%f),boxThresh(%f),unClipRatio(%f),doAngle(%d),mostAngle(%d)",
+           padding, maxSideLen, boxScoreThresh, boxThresh, unClipRatio, doAngle, mostAngle);
+    cv::Mat imgRGBA, imgRGB, imgOut;
+    bitmapToMat(env, input, imgRGBA);
+    cv::cvtColor(imgRGBA, imgRGB, cv::COLOR_RGBA2RGB);
+    int originMaxSide = (std::max)(imgRGB.cols, imgRGB.rows);
+    int resize;
+    if (maxSideLen <= 0 || maxSideLen > originMaxSide) {
+        resize = originMaxSide;
+    } else {
+        resize = maxSideLen;
+    }
+    resize += 2*padding;
+    cv::Rect paddingRect(padding, padding, imgRGB.cols, imgRGB.rows);
+    cv::Mat paddingSrc = makePadding(imgRGB, padding);
+    //按比例缩小图像，减少文字分割时间
+    ScaleParam s = getScaleParam(paddingSrc, resize);//例：按长或宽缩放 src.cols=不缩放，src.cols/2=长度缩小一半
+    OcrResult ocrResult = ocrLite->detect(paddingSrc, paddingRect, s, boxScoreThresh, boxThresh,
+                                          unClipRatio, doAngle, mostAngle);
+
+    cv::cvtColor(ocrResult.boxImg, imgOut, cv::COLOR_RGB2RGBA);
+    matToBitmap(env, imgOut, output);
+
+    return OcrResultUtils(env, ocrResult, output).getJObject();
+}
+
 
 
 

@@ -1,5 +1,7 @@
 package com.example.aidemo;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
@@ -16,6 +18,7 @@ import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.util.Size;
+import android.widget.Toast;
 
 import com.example.aidemo.TFLite.SplitBitmap;
 
@@ -404,5 +407,13 @@ public class Utils {
         }
 
         return mBitmap;
+    }
+
+    // 复制到剪贴板
+    public static final void ToClipboard(Context toClipboard,String text){
+        ClipboardManager cm = (ClipboardManager) toClipboard.getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData mClipData = ClipData.newPlainText(toClipboard.getPackageName(), text);
+        cm.setPrimaryClip(mClipData);
+        Toast.makeText(toClipboard, "已复制到剪切板！", Toast.LENGTH_SHORT).show();
     }
 }

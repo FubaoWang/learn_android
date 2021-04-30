@@ -21,7 +21,7 @@
             android:src="@android:drawable/ic_menu_send"
             app:layout_constraintBottom_toTopOf="@+id/guideline47"
             app:layout_constraintEnd_toStartOf="@+id/guideline52"
-            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/guideline51"
             app:layout_constraintTop_toTopOf="@+id/guideline46"
             app:layout_constraintVertical_bias="1.0"
@@ -82,7 +82,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="选图"
+                android:text="清除"
                 android:textColor="@color/colorPrimaryDark" />
 
             <Button
@@ -151,6 +151,16 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             app:layout_constraintGuide_percent="0.94" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="312dp"
+            android:layout_height="287dp"
+            app:layout_constraintBottom_toBottomOf="@+id/ocrimageView"
+            app:layout_constraintEnd_toEndOf="@+id/ocrimageView"
+            app:layout_constraintStart_toStartOf="@+id/ocrimageView"
+            app:layout_constraintTop_toTopOf="@+id/ocrimageView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
