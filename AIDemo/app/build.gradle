@@ -31,12 +31,12 @@ android {
     }
 
     aaptOptions {
-        noCompress "tflite"
+        noCompress "tflite", "mnn", "bin", "param"
     }
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
