@@ -18,7 +18,7 @@
 
 
 #ifndef LOG_TAG
-#define LOG_TAG "WFB"
+#define LOG_TAG "JNI"
 #define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG ,__VA_ARGS__) // 定义LOGD类型
 #define LOGI(...) __android_log_print(ANDROID_LOG_INFO,LOG_TAG ,__VA_ARGS__) // 定义LOGI类型
 #define LOGW(...) __android_log_print(ANDROID_LOG_WARN,LOG_TAG ,__VA_ARGS__) // 定义LOGW类型
@@ -72,7 +72,7 @@ Java_com_example_aidemo_mnn_NanoDet_detect(JNIEnv *env, jclass clazz, jobject bi
     if (srcMatImg.channels() != 3) {
         LOGE("input image format channels != 3");
     }
-
+    LOGD("start detect  !!!");
     auto result = NanoDet::detector->detect(srcMatImg, (unsigned char *)imageDate, width, height, threshold, nms_threshold);
 
     srcMatImg.release();

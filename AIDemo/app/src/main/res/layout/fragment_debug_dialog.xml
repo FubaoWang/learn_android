@@ -19,7 +19,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/debugRV"
         android:layout_width="match_parent"
-        android:layout_height="613dp" />
+        android:layout_height="wrap_content" />
 
     <ImageView style="@style/ButtonSeparatorH" />
 

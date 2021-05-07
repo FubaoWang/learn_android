@@ -3,6 +3,16 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
+
+    signingConfigs {
+        release {
+            keyAlias 'key0'
+            keyPassword '123456'
+            storeFile file('key-keystore.jks')
+            storePassword '123456'
+        }
+    }
+
     defaultConfig {
         applicationId "com.example.aidemo"
         minSdkVersion 26
@@ -36,9 +46,16 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+            debuggable false
         }
+        //这说明，安装debug时候，主城release包
+        debug {
+            signingConfig signingConfigs.release
+        }
+
     }
     externalNativeBuild {
         cmake {
